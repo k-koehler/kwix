@@ -5,6 +5,7 @@ import MiddlewareError from "../middleware-errors/middleware.error";
 import { ConcreteMiddleware } from "../middleware/middleware";
 import Controller from "./controller";
 import Maybe from "../utils/maybe";
+import { VolatileError } from "../utils";
 
 export default abstract class MiddlewareController<
   Rq extends Request,

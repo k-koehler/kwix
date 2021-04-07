@@ -1,4 +1,4 @@
-import { Awaitable } from "../types";
+import { Awaitable } from "../defs";
 
 export default abstract class HashedPassword {
   public hash: string;
