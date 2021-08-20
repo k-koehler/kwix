@@ -6,6 +6,7 @@ import { ConcreteMiddleware } from "../middleware/middleware";
 import Controller from "./controller";
 import Maybe from "../utils/maybe";
 import { VolatileError } from "../utils";
+import { BadRequestError } from "../middleware-errors";
 
 export default abstract class MiddlewareController<
   Rq extends Request,
@@ -32,12 +33,15 @@ export default abstract class MiddlewareController<
 
   private handleError(error: Error) {
     if (error instanceof MiddlewareError) {
+      if (error instanceof BadRequestError) {
+        return this.badRequest(error.message);
+      }
       if (error instanceof FormError) {
         return this.formError(error.errors);
       }
       return this.status(error.statusCode);
     }
-    return this.error();
+    return this.error(error);
   }
 
   public async run() {
