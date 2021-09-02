@@ -32,6 +32,12 @@ export default abstract class Router<Rq extends Request, Rs extends Response> {
         };
       },
 
+      Put: (route: string) => {
+        return (Controller: ConcreteController<Rq, Rs>) => {
+          this.bindRoute(route, Controller, RouteMethod.Put);
+        };
+      },
+
       Patch: (route: string) => {
         return (Controller: ConcreteController<Rq, Rs>) => {
           this.bindRoute(route, Controller, RouteMethod.Patch);
