@@ -4,7 +4,37 @@
 
 `kwix` is a framework-agnostic library for building scalable, object-oriented, typescript nodejs applications. `kwix` uses a controller/middleware pattern allowing you to build extensible controllers and middlewares.
 
-## Getting Started
+## Getting started
+
+`kwix` ships with fastify/express support. To get started simply create a router and go wild with controllers!
+
+```typescript
+// app.ts
+import fastify from "fastify";
+import { FastifyRouter, FastifyServer } from "kwix/fastify";
+
+const app = fastify();
+
+export const { Get, Post, Patch, Delete } = new FastifyRouter(
+  new FastifyServer(app)
+).methods();
+
+export default app;
+```
+
+```typescript
+// controller.ts
+import { FastifyController } from "kwix/fastify";
+
+@Get("/hello-world")
+export default class HelloWorldController extends FastifyController {
+  protected handle(){
+    return this.success()
+  }
+}
+```
+
+## Using custom frameworks
 
 Firstly, select an http framework of your choice, i.e. express/fastify.
 
@@ -57,7 +87,9 @@ export default class MyAwesomeFrameworkRouter extends Router<
     this.server = server;
   }
 }
+```
 
+```typescript
 // app.ts
 import instance from "my-awesome-framework";
 import MyAwesomeFrameworkServer from "./server";
@@ -92,9 +124,9 @@ LASTLY, create controllers at will!
 import BaseController from "./base-controller";
 
 @Get("/hello-world")
-export default class HelloWorldController {
+export default class HelloWorldController extends BaseController {
   protected handle(){
-    return this.success()
+    return this.success();
   }
 }
 ```
