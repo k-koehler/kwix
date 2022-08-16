@@ -22,11 +22,15 @@ export default abstract class Controller<
 
   protected abstract status(code: StatusCode): Awaitable<Rs>;
 
-  protected abstract badRequest(reason?: string): Awaitable<Rs>;
-
   protected abstract success<T>(value?: T): Awaitable<Rs>;
 
+  protected abstract badRequest(reason?: string): Awaitable<Rs>;
+
   protected abstract unauthorized(): Awaitable<Rs>;
+
+  protected abstract forbidden(reason?: string): Awaitable<Rs>;
+
+  protected abstract notFound(reason?: string): Awaitable<Rs>;
 
   protected abstract formError(errors: object): Awaitable<Rs>;
 

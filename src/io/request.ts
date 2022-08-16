@@ -7,4 +7,7 @@ export default abstract class Request {
   public abstract params<
     T extends Record<string, string> = Record<string, string>
   >(): T;
+  public abstract cookies<
+    T extends Record<string, string> = Record<string, string>
+  >(): T;
 }

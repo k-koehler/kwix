@@ -6,7 +6,13 @@ import { ConcreteMiddleware } from "../middleware/middleware";
 import Controller from "./controller";
 import Maybe from "../utils/maybe";
 import { VolatileError } from "../utils";
-import { BadRequestError } from "../middleware-errors";
+import {
+  BadRequestError,
+  ForbiddenError,
+  NotFoundError,
+  UnauthorizedError,
+} from "../middleware-errors";
+import { Awaitable } from "../defs";
 
 export default abstract class MiddlewareController<
   Rq extends Request,
@@ -14,6 +20,8 @@ export default abstract class MiddlewareController<
 > extends Controller<Rq, Rs> {
   private middlewares: ConcreteMiddleware<unknown>[];
   private middlewareResults: WeakMap<ConcreteMiddleware<unknown>, any>;
+
+  protected abstract onError?: (error: Error) => Awaitable<unknown>;
 
   public constructor(req: Rq, res: Rs) {
     super(req, res);
@@ -30,14 +38,23 @@ export default abstract class MiddlewareController<
   ): Maybe<T> {
     return new Maybe(this.middlewareResults.get(middleware));
   }
-
   private handleError(error: Error) {
+    this.onError?.(error);
     if (error instanceof MiddlewareError) {
       if (error instanceof BadRequestError) {
         return this.badRequest(error.message);
       }
+      if (error instanceof ForbiddenError) {
+        return this.forbidden(error.message);
+      }
       if (error instanceof FormError) {
         return this.formError(error.errors);
+      }
+      if (error instanceof NotFoundError) {
+        return this.notFound(error.message);
+      }
+      if (error instanceof UnauthorizedError) {
+        return this.notFound(error.message);
       }
       return this.status(error.statusCode);
     }
@@ -56,7 +73,7 @@ export default abstract class MiddlewareController<
     try {
       return await super.run();
     } catch (e) {
-      return this.handleError(e);
+      return this.handleError(e as Error);
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "kwix",
-  "version": "0.0.3",
+  "version": "0.0.6",
   "description": "Backend framework for node enthusiasts",
   "author": "k-koehler <kevin.koehler@usask.ca>",
   "homepage": "https://github.com/k-koehler/kwix#readme",
