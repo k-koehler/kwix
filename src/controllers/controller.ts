@@ -26,7 +26,7 @@ export default abstract class Controller<
 
   protected abstract badRequest(reason?: string): Awaitable<Rs>;
 
-  protected abstract unauthorized(): Awaitable<Rs>;
+  protected abstract unauthorized(reason?: string): Awaitable<Rs>;
 
   protected abstract forbidden(reason?: string): Awaitable<Rs>;
 

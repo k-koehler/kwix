@@ -54,7 +54,7 @@ export default abstract class MiddlewareController<
         return this.notFound(error.message);
       }
       if (error instanceof UnauthorizedError) {
-        return this.notFound(error.message);
+        return this.unauthorized(error.message);
       }
       return this.status(error.statusCode);
     }
